@@ -3,84 +3,142 @@
 @tailwind utilities;
 
 :root {
-  /* Essence AI / Muji Color Palette */
-  --muji-bg: #F5F5F3;
-  /* 米灰色背景，接近再生紙 */
-  --muji-ink: #2B2B2B;
-  /* 墨色，非純黑 */
-  --muji-gray: #7A7A7A;
-  /* 次要文字灰 */
-  --muji-line: #E0E0E0;
-  /* 極細分隔線顏色 */
-  --muji-accent: #8C3A3A;
-  /* 類似印泥的暗紅 */
+  /* Design System v2.0 - Brand Colors */
+  --brand-bg: #F5F5F3;        /* 再生紙白 */
+  --brand-ink: #2B2B2B;       /* 墨黑 */
+  --brand-gray: #7A7A7A;      /* 石墨灰 */
+  --brand-light-gray: #D4D4D4; /* 淺灰 (邊框) */
+  --brand-line: #E5E5E5;      /* 極細線 */
+  --brand-red: #8C3A3A;       /* 印泥紅 */
 
-  --background: var(--muji-bg);
-  --foreground: var(--muji-ink);
+  /* Legacy aliases (backward compatibility) */
+  --muji-bg: var(--brand-bg);
+  --muji-ink: var(--brand-ink);
+  --muji-gray: var(--brand-gray);
+  --muji-line: var(--brand-line);
+  --muji-accent: var(--brand-red);
+
+  --background: var(--brand-bg);
+  --foreground: var(--brand-ink);
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: var(--font-noto-serif), serif;
+  font-family: var(--font-noto-serif), "Noto Serif TC", serif;
   font-weight: 300;
-  /* 預設細體 */
   line-height: 1.8;
   letter-spacing: 0.02em;
 }
 
-/* Muji-style headings */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-weight: 300;
-  /* 細體 */
+/* Typography Scale (Major Third 1.250) */
+h1 {
+  font-size: 3.75rem; /* 60px */
+  line-height: 1.2;
   letter-spacing: 0.05em;
-  color: var(--muji-ink);
+  font-weight: 300;
 }
 
-/* Remove default margins */
+h2 {
+  font-size: 2.25rem; /* 36px */
+  line-height: 1.3;
+  letter-spacing: 0.05em;
+  font-weight: 300;
+}
+
+h3 {
+  font-size: 1.5rem; /* 24px */
+  line-height: 1.4;
+  letter-spacing: 0.025em;
+  font-weight: 400;
+}
+
+h4 {
+  font-size: 1.125rem; /* 18px */
+  line-height: 1.5;
+  letter-spacing: 0.025em;
+  font-weight: 500;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--brand-ink);
+}
+
+/* Small/Caption text */
+.text-small {
+  font-size: 0.75rem; /* 12px */
+  line-height: 1.5;
+  letter-spacing: 0.1em;
+  font-weight: 400;
+}
+
+/* Reset */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-/* Scrollbar styling */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--muji-bg);
+  background: var(--brand-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #D1D1D1;
-  border-radius: 3px;
+  background: var(--brand-light-gray);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--brand-red);
 }
 
 /* Selection styling */
 ::selection {
-  background: var(--muji-line);
-  color: var(--muji-ink);
+  background: var(--brand-line);
+  color: var(--brand-ink);
 }
 
 /* Thin border utility */
 .thin-border {
-  border-width: 0.5px;
-  border-color: var(--muji-line);
+  border-width: 1px;
+  border-color: var(--brand-line);
+}
+
+/* Paper texture background */
+.paper-texture {
+  background-color: var(--brand-bg);
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
 }
 
 /* Grayscale images */
 .muted-img {
   filter: grayscale(100%) contrast(0.9);
-  transition: filter 0.5s ease;
+  transition: filter 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .group:hover .muted-img {
   filter: grayscale(0%) contrast(1);
+}
+
+/* Brand transition timing */
+.transition-brand {
+  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition-duration: 700ms;
+}
+
+/* Tech tag (Lato font) */
+.tech-tag {
+  font-family: "Lato", sans-serif;
+  font-size: 0.65rem;
+  color: var(--brand-red);
+  background: rgba(140, 58, 58, 0.05);
+  padding: 2px 6px;
+  border-radius: 2px;
+  letter-spacing: 0.05em;
+  display: inline-block;
 }
