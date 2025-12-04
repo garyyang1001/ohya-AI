@@ -10965,19 +10965,27 @@ export type WritingSettings = {
   useSmilies?: Maybe<Scalars['Boolean']['output']>;
 };
 
-export type GetPageBySlugQueryVariables = Exact<{
-  slug: Scalars['ID']['input'];
+export type GetPostsQueryVariables = Exact<{
+  first: Scalars['Int']['input'];
+  after?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetPageBySlugQuery = { __typename?: 'RootQuery', page?: { __typename?: 'Page', id: string, title?: string | null, content?: string | null, slug?: string | null, uri?: string | null, date?: string | null, modified?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null } | null } } | null } | null };
+export type GetPostsQuery = { __typename?: 'RootQuery', posts?: { __typename?: 'RootQueryToPostConnection', pageInfo: { __typename?: 'RootQueryToPostConnectionPageInfo', hasNextPage: boolean, endCursor?: string | null }, nodes: Array<{ __typename?: 'Post', id: string, title?: string | null, slug?: string | null, date?: string | null, excerpt?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null } } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes: Array<{ __typename?: 'Category', name?: string | null, slug?: string | null }> } | null }> } | null };
 
 export type GetPostBySlugQueryVariables = Exact<{
   slug: Scalars['ID']['input'];
 }>;
 
 
-export type GetPostBySlugQuery = { __typename?: 'RootQuery', post?: { __typename?: 'Post', id: string, title?: string | null, content?: string | null, slug?: string | null, uri?: string | null, date?: string | null, modified?: string | null, excerpt?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null } | null } } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes: Array<{ __typename?: 'Category', name?: string | null, slug?: string | null, uri?: string | null }> } | null, tags?: { __typename?: 'PostToTagConnection', nodes: Array<{ __typename?: 'Tag', name?: string | null, slug?: string | null }> } | null } | null };
+export type GetPostBySlugQuery = { __typename?: 'RootQuery', post?: { __typename?: 'Post', id: string, title?: string | null, content?: string | null, date?: string | null, slug?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null } } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes: Array<{ __typename?: 'Category', name?: string | null, slug?: string | null }> } | null, author?: { __typename?: 'NodeWithAuthorToUserConnectionEdge', node: { __typename?: 'User', name?: string | null, avatar?: { __typename?: 'Avatar', url?: string | null } | null } } | null, seo?: { __typename?: 'RankMathPostObjectSeo', title?: string | null, description?: string | null, openGraph?: { __typename?: 'RankMathOpenGraphMeta', image?: { __typename?: 'RankMathOpenGraphImage', url?: string | null } | null } | null } | null } | null };
+
+export type GetPageBySlugQueryVariables = Exact<{
+  slug: Scalars['ID']['input'];
+}>;
+
+
+export type GetPageBySlugQuery = { __typename?: 'RootQuery', page?: { __typename?: 'Page', id: string, title?: string | null, content?: string | null, slug?: string | null, uri?: string | null, date?: string | null, modified?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null } | null } } | null } | null };
 
 export type GetAllPostSlugsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -11035,6 +11043,75 @@ export class TypedDocumentString<TResult, TVariables>
   }
 }
 
+export const GetPostsDocument = new TypedDocumentString(`
+    query GetPosts($first: Int!, $after: String) {
+  posts(first: $first, after: $after, where: {status: PUBLISH}) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    nodes {
+      id
+      title
+      slug
+      date
+      excerpt
+      featuredImage {
+        node {
+          sourceUrl
+          altText
+        }
+      }
+      categories {
+        nodes {
+          name
+          slug
+        }
+      }
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<GetPostsQuery, GetPostsQueryVariables>;
+export const GetPostBySlugDocument = new TypedDocumentString(`
+    query GetPostBySlug($slug: ID!) {
+  post(id: $slug, idType: SLUG) {
+    id
+    title
+    content
+    date
+    slug
+    featuredImage {
+      node {
+        sourceUrl
+        altText
+      }
+    }
+    categories {
+      nodes {
+        name
+        slug
+      }
+    }
+    author {
+      node {
+        name
+        avatar {
+          url
+        }
+      }
+    }
+    seo {
+      title
+      description
+      openGraph {
+        image {
+          url
+        }
+      }
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<GetPostBySlugQuery, GetPostBySlugQueryVariables>;
 export const GetPageBySlugDocument = new TypedDocumentString(`
     query GetPageBySlug($slug: ID!) {
   page(id: $slug, idType: URI) {
@@ -11058,43 +11135,6 @@ export const GetPageBySlugDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<GetPageBySlugQuery, GetPageBySlugQueryVariables>;
-export const GetPostBySlugDocument = new TypedDocumentString(`
-    query GetPostBySlug($slug: ID!) {
-  post(id: $slug, idType: SLUG) {
-    id
-    title
-    content
-    slug
-    uri
-    date
-    modified
-    excerpt
-    featuredImage {
-      node {
-        sourceUrl
-        altText
-        mediaDetails {
-          width
-          height
-        }
-      }
-    }
-    categories {
-      nodes {
-        name
-        slug
-        uri
-      }
-    }
-    tags {
-      nodes {
-        name
-        slug
-      }
-    }
-  }
-}
-    `) as unknown as TypedDocumentString<GetPostBySlugQuery, GetPostBySlugQueryVariables>;
 export const GetAllPostSlugsDocument = new TypedDocumentString(`
     query GetAllPostSlugs {
   posts(first: 1000) {
