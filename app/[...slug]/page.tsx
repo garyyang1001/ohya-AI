@@ -167,10 +167,10 @@ export default async function ContentPage({ params }: { params: Promise<{ slug: 
       />
 
       {/* Tags (for posts only) */}
-      {type === 'post' && 'tags' in data.post! && data.post!.tags?.nodes && data.post!.tags.nodes.length > 0 && (
+      {type === 'post' && data.post && (data.post as any).tags?.nodes && (data.post as any).tags.nodes.length > 0 && (
         <div className="mt-8 pt-6 border-t">
           <div className="flex flex-wrap gap-2">
-            {data.post!.tags.nodes.map((tag: any, index: number) => (
+            {(data.post as any).tags.nodes.map((tag: any, index: number) => (
               <span key={index} className="bg-blue-50 text-blue-700 px-3 py-1 rounded-full text-sm">
                 #{tag?.name}
               </span>
