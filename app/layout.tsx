@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Noto_Serif_TC } from "next/font/google";
 import "./globals.css";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
 
 const notoSerifTC = Noto_Serif_TC({
     subsets: ["latin"],
@@ -20,7 +22,13 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="zh-TW">
-            <body className={notoSerifTC.className}>{children}</body>
+            <body className={`${notoSerifTC.className} flex flex-col min-h-screen`}>
+                <Header />
+                <main className="flex-grow">
+                    {children}
+                </main>
+                <Footer />
+            </body>
         </html>
     );
 }

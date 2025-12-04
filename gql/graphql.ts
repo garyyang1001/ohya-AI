@@ -10994,6 +10994,18 @@ export type GetHomepageContentQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetHomepageContentQuery = { __typename?: 'RootQuery', posts?: { __typename?: 'RootQueryToPostConnection', nodes: Array<{ __typename?: 'Post', id: string, title?: string | null, excerpt?: string | null, slug?: string | null, uri?: string | null, date?: string | null, featuredImage?: { __typename?: 'NodeWithFeaturedImageToMediaItemConnectionEdge', node: { __typename?: 'MediaItem', sourceUrl?: string | null, altText?: string | null, mediaDetails?: { __typename?: 'MediaDetails', width?: number | null, height?: number | null } | null } } | null, categories?: { __typename?: 'PostToCategoryConnection', nodes: Array<{ __typename?: 'Category', name?: string | null, slug?: string | null }> } | null }> } | null, generalSettings?: { __typename?: 'GeneralSettings', title?: string | null, description?: string | null } | null };
 
+export type GetMenuByLocationQueryVariables = Exact<{
+  location: MenuLocationEnum;
+}>;
+
+
+export type GetMenuByLocationQuery = { __typename?: 'RootQuery', menuItems?: { __typename?: 'RootQueryToMenuItemConnection', nodes: Array<{ __typename?: 'MenuItem', id: string, label?: string | null, url?: string | null, path?: string | null, parentId?: string | null, cssClasses?: Array<string | null> | null, target?: string | null, order?: number | null }> } | null };
+
+export type GetAllMenusQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllMenusQuery = { __typename?: 'RootQuery', menus?: { __typename?: 'RootQueryToMenuConnection', nodes: Array<{ __typename?: 'Menu', id: string, name?: string | null, slug?: string | null, locations?: Array<MenuLocationEnum | null> | null, menuItems?: { __typename?: 'MenuToMenuItemConnection', nodes: Array<{ __typename?: 'MenuItem', id: string, label?: string | null, url?: string | null, path?: string | null, parentId?: string | null, order?: number | null }> } | null }> } | null };
+
 export type GetPostsAndSiteInfoQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -11135,6 +11147,44 @@ export const GetHomepageContentDocument = new TypedDocumentString(`
   }
 }
     `) as unknown as TypedDocumentString<GetHomepageContentQuery, GetHomepageContentQueryVariables>;
+export const GetMenuByLocationDocument = new TypedDocumentString(`
+    query GetMenuByLocation($location: MenuLocationEnum!) {
+  menuItems(where: {location: $location}, first: 50) {
+    nodes {
+      id
+      label
+      url
+      path
+      parentId
+      cssClasses
+      target
+      order
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<GetMenuByLocationQuery, GetMenuByLocationQueryVariables>;
+export const GetAllMenusDocument = new TypedDocumentString(`
+    query GetAllMenus {
+  menus {
+    nodes {
+      id
+      name
+      slug
+      locations
+      menuItems {
+        nodes {
+          id
+          label
+          url
+          path
+          parentId
+          order
+        }
+      }
+    }
+  }
+}
+    `) as unknown as TypedDocumentString<GetAllMenusQuery, GetAllMenusQueryVariables>;
 export const GetPostsAndSiteInfoDocument = new TypedDocumentString(`
     query GetPostsAndSiteInfo {
   posts(first: 5) {
