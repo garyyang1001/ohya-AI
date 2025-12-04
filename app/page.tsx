@@ -89,27 +89,7 @@ function FadeInSection({ children, delay = 0 }: { children: React.ReactNode; del
 
 export default function Home() {
     return (
-        <div className="min-h-screen">
-
-            {/* Minimal Header */}
-            <header className="fixed w-full z-50 top-0 left-0 px-6 py-6 bg-[var(--muji-bg)]/95 backdrop-blur-sm thin-border border-b">
-                <div className="max-w-[1600px] mx-auto flex justify-between items-center">
-                    <Link href="/" className="text-xl tracking-[0.2em] font-medium text-[var(--muji-ink)] hover:opacity-70 transition-opacity">
-                        好事發生<span className="text-xs align-top ml-1">數位</span>
-                    </Link>
-                    <nav className="hidden md:flex space-x-12 text-sm tracking-[0.3em] text-[var(--muji-gray)]">
-                        <Link href="/blog" className="hover:text-[var(--muji-ink)] transition-colors duration-300">
-                            文章
-                        </Link>
-                        <Link href="/about" className="hover:text-[var(--muji-ink)] transition-colors duration-300">
-                            關於
-                        </Link>
-                        <Link href="/contact" className="hover:text-[var(--muji-ink)] transition-colors duration-300">
-                            聯繫
-                        </Link>
-                    </nav>
-                </div>
-            </header>
+        <div className="min-h-screen pt-20">
 
             {/* Hero Section */}
             <section className="relative min-h-screen flex items-center justify-center pt-20 px-6">
@@ -221,19 +201,6 @@ export default function Home() {
                     </FadeInSection>
                 </div>
             </section>
-
-            {/* Footer */}
-            <footer className="py-12 px-6 thin-border border-t text-center md:text-left">
-                <div className="max-w-[1600px] mx-auto flex flex-col md:flex-row justify-between items-center text-xs text-[var(--muji-gray)] tracking-[0.3em]">
-                    <div className="mb-4 md:mb-0">
-                        © 2024 好事發生數位
-                    </div>
-                    <div className="flex space-x-8">
-                        <Link href="#" className="hover:text-[var(--muji-ink)] transition-colors">LINKEDIN</Link>
-                        <Link href="#" className="hover:text-[var(--muji-ink)] transition-colors">MEDIUM</Link>
-                    </div>
-                </div>
-            </footer>
 
         </div>
     );

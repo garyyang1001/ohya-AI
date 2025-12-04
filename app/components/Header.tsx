@@ -39,7 +39,7 @@ async function fetchMenu(): Promise<MenuData | null> {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query: GET_HEADER_MENU }),
-      next: { revalidate: 3600 }, // Cache for 1 hour
+      next: { revalidate: 3600 },
     });
 
     if (!res.ok) return null;
@@ -55,8 +55,7 @@ async function fetchMenu(): Promise<MenuData | null> {
 function toInternalPath(url: string | null, path: string | null): string {
   if (path) return path;
   if (!url) return '/';
-  
-  // Remove domain and get path only
+
   try {
     const urlObj = new URL(url);
     return urlObj.pathname || '/';
@@ -65,9 +64,8 @@ function toInternalPath(url: string | null, path: string | null): string {
   }
 }
 
-// Build menu tree (handle parent-child relationships)
+// Build menu tree
 function buildMenuTree(items: MenuItem[]): MenuItem[] {
-  // Only return top-level items (no parent)
   return items
     .filter(item => !item.parentId)
     .sort((a, b) => (a.order || 0) - (b.order || 0));
@@ -79,69 +77,56 @@ export default async function Header() {
   const topLevelItems = buildMenuTree(menuItems);
 
   return (
-    <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              ohya.co
-            </span>
-          </Link>
+    <header className="fixed w-full z-50 top-0 left-0 px-6 py-6 bg-[var(--muji-bg)]/95 backdrop-blur-sm thin-border border-b">
+      <div className="max-w-[1600px] mx-auto flex justify-between items-center">
+        {/* Logo */}
+        <Link
+          href="/"
+          className="text-xl tracking-[0.2em] font-medium text-[var(--muji-ink)] hover:opacity-70 transition-opacity"
+        >
+          好事發生<span className="text-xs align-top ml-1">數位</span>
+        </Link>
 
-          {/* Navigation */}
-          <nav className="hidden md:flex items-center gap-8">
-            {topLevelItems.length > 0 ? (
-              topLevelItems.map((item) => (
-                <Link
-                  key={item.id}
-                  href={toInternalPath(item.url, item.path)}
-                  className="text-gray-600 hover:text-gray-900 font-medium transition-colors"
-                >
-                  {item.label}
-                </Link>
-              ))
-            ) : (
-              // Fallback navigation if no menu data
-              <>
-                <Link href="/" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
-                  首頁
-                </Link>
-                <Link href="/about" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
-                  關於我們
-                </Link>
-                <Link href="/services" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
-                  服務項目
-                </Link>
-                <Link href="/contact" className="text-gray-600 hover:text-gray-900 font-medium transition-colors">
-                  聯絡我們
-                </Link>
-              </>
-            )}
-          </nav>
+        {/* Navigation */}
+        <nav className="hidden md:flex space-x-12 text-sm tracking-[0.3em] text-[var(--muji-gray)]">
+          {topLevelItems.length > 0 ? (
+            topLevelItems.map((item) => (
+              <Link
+                key={item.id}
+                href={toInternalPath(item.url, item.path)}
+                className="hover:text-[var(--muji-ink)] transition-colors duration-300"
+              >
+                {item.label}
+              </Link>
+            ))
+          ) : (
+            // Fallback navigation
+            <>
+              <Link href="/blog" className="hover:text-[var(--muji-ink)] transition-colors duration-300">
+                文章
+              </Link>
+              <Link href="/about" className="hover:text-[var(--muji-ink)] transition-colors duration-300">
+                關於
+              </Link>
+              <Link href="/contact" className="hover:text-[var(--muji-ink)] transition-colors duration-300">
+                聯繫
+              </Link>
+            </>
+          )}
+        </nav>
 
-          {/* CTA Button */}
-          <div className="flex items-center gap-4">
-            <Link
-              href="/contact"
-              className="hidden sm:inline-flex px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium rounded-lg hover:opacity-90 transition-opacity"
-            >
-              免費諮詢
-            </Link>
-
-            {/* Mobile Menu Button */}
-            <button
-              type="button"
-              className="md:hidden p-2 text-gray-600 hover:text-gray-900"
-              aria-label="開啟選單"
-            >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
-          </div>
-        </div>
+        {/* Mobile Menu Button */}
+        <button
+          type="button"
+          className="md:hidden text-[var(--muji-ink)] hover:opacity-70 transition-opacity"
+          aria-label="開啟選單"
+        >
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
       </div>
     </header>
   );
 }
+
