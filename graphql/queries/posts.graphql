@@ -1,0 +1,12 @@
+query GetPostsAndSiteInfo {
+  posts(first: 5) {
+    nodes {
+      title
+      date
+    }
+  }
+  generalSettings {
+    title
+    description
+  }
+}

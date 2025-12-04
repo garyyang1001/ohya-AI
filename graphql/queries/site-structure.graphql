@@ -1,0 +1,64 @@
+query AnalyzeSiteStructure {
+  # Get content types
+  contentTypes {
+    nodes {
+      name
+      label
+      graphqlSingleName
+      graphqlPluralName
+    }
+  }
+  
+  # Get categories
+  categories(first: 20) {
+    nodes {
+      name
+      slug
+      count
+    }
+  }
+  
+  # Get tags
+  tags(first: 20) {
+    nodes {
+      name
+      slug
+      count
+    }
+  }
+  
+  # Get all pages to understand structure
+  pages(first: 50) {
+    nodes {
+      title
+      slug
+      uri
+      parentId
+    }
+  }
+  
+  # Get recent posts to see URL pattern
+  posts(first: 10) {
+    nodes {
+      title
+      slug
+      uri
+      date
+      categories {
+        nodes {
+          name
+          slug
+        }
+      }
+    }
+  }
+  
+  # Get menus
+  menus {
+    nodes {
+      name
+      slug
+      locations
+    }
+  }
+}

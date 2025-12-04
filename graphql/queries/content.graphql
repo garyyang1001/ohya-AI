@@ -1,0 +1,73 @@
+query GetPageBySlug($slug: ID!) {
+  page(id: $slug, idType: URI) {
+    id
+    title
+    content
+    slug
+    uri
+    date
+    modified
+    featuredImage {
+      node {
+        sourceUrl
+        altText
+        mediaDetails {
+          width
+          height
+        }
+      }
+    }
+  }
+}
+
+query GetPostBySlug($slug: ID!) {
+  post(id: $slug, idType: SLUG) {
+    id
+    title
+    content
+    slug
+    uri
+    date
+    modified
+    excerpt
+    featuredImage {
+      node {
+        sourceUrl
+        altText
+        mediaDetails {
+          width
+          height
+        }
+      }
+    }
+    categories {
+      nodes {
+        name
+        slug
+        uri
+      }
+    }
+    tags {
+      nodes {
+        name
+        slug
+      }
+    }
+  }
+}
+
+query GetAllPostSlugs {
+  posts(first: 1000) {
+    nodes {
+      slug
+    }
+  }
+}
+
+query GetAllPageSlugs {
+  pages(first: 1000) {
+    nodes {
+      slug
+    }
+  }
+}
