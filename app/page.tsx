@@ -33,7 +33,7 @@ const services = [
         id: 2,
         title: 'AI SEO 自動化行銷',
         description: '顧問 + AI Agent 團隊協作提供 24/7 不間斷的優化服務',
-        link: '/seo',
+        link: '/ai-seo-marketing',
         icon: 'chart-line-up',
     },
     {
