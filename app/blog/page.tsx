@@ -52,7 +52,7 @@ export default async function BlogArchive() {
                 </p>
             </header>
 
-            {/* Categories Grid - 深色卡片 */}
+            {/* Categories Grid - 簡潔白色卡片風格 */}
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {categories.map((category) => (
                     <Link
@@ -60,46 +60,69 @@ export default async function BlogArchive() {
                         href={`/blog/category/${category.slug}`}
                         className="group block"
                     >
-                        <div className="relative overflow-hidden rounded-2xl bg-[#1A1A1A] p-6 md:p-8 min-h-[200px] flex flex-col justify-end transition-all duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] hover:translate-y-[-4px] hover:shadow-2xl">
-                            {/* 裝飾圖示 */}
-                            <div className="absolute top-6 right-6 text-4xl opacity-30 group-hover:opacity-60 transition-opacity duration-500">
-                                {categoryIcons[category.slug] || categoryIcons['default']}
-                            </div>
-
-                            {/* 文章數量 */}
-                            <div className="mb-3">
-                                <span className="text-white/40 text-xs tracking-widest uppercase">
-                                    {category.count} 篇文章
+                        <div
+                            className="relative overflow-hidden bg-white border border-[var(--brand-line)] p-8 min-h-[200px] flex flex-col justify-between transition-all duration-700 hover:border-[var(--brand-red)] hover:-translate-y-1 hover:shadow-lg"
+                            style={{ transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}
+                        >
+                            {/* 頂部：圖示與數量 */}
+                            <div className="flex justify-between items-start">
+                                <div className="text-3xl opacity-60 group-hover:opacity-100 transition-opacity duration-500">
+                                    {categoryIcons[category.slug] || categoryIcons['default']}
+                                </div>
+                                <span className="text-xs tracking-widest text-[var(--brand-gray)] uppercase">
+                                    {category.count} 篇
                                 </span>
                             </div>
 
-                            {/* 分類名稱 */}
-                            <h2 className="text-xl md:text-2xl font-light text-white mb-2 group-hover:text-[var(--brand-red)] transition-colors duration-500">
-                                {category.name}
-                            </h2>
+                            {/* 底部：名稱與描述 */}
+                            <div>
+                                <h2
+                                    className="text-xl md:text-2xl font-light text-[var(--brand-ink)] mb-2 group-hover:text-[var(--brand-red)] group-hover:translate-x-1 transition-all duration-500"
+                                    style={{ transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}
+                                >
+                                    {category.name}
+                                </h2>
 
-                            {/* 描述 */}
-                            {category.description && (
-                                <p className="text-sm text-white/60 line-clamp-2 font-light">
-                                    {category.description}
-                                </p>
-                            )}
+                                {category.description && (
+                                    <p className="text-sm text-[var(--brand-gray)] line-clamp-2 font-light leading-relaxed">
+                                        {category.description}
+                                    </p>
+                                )}
+                            </div>
+
+                            {/* 箭頭指示器 */}
+                            <span
+                                className="absolute bottom-8 right-8 text-[var(--brand-line)] group-hover:text-[var(--brand-red)] group-hover:translate-x-1 transition-all duration-500"
+                                style={{ transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}
+                            >
+                                →
+                            </span>
                         </div>
                     </Link>
                 ))}
 
-                {/* 所有文章卡片 */}
+                {/* 所有文章卡片 - 使用品牌紅色邊框 */}
                 <Link href="/blog/all" className="group block">
-                    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-[var(--brand-red)] to-[#8B2E2B] p-6 md:p-8 min-h-[200px] flex flex-col justify-end transition-all duration-500 ease-[cubic-bezier(0.25,0.46,0.45,0.94)] hover:translate-y-[-4px] hover:shadow-2xl">
-                        <div className="absolute top-6 right-6 text-4xl opacity-30">
+                    <div
+                        className="relative overflow-hidden bg-white border-2 border-[var(--brand-red)] p-8 min-h-[200px] flex flex-col justify-between transition-all duration-700 hover:bg-[var(--brand-red)] hover:-translate-y-1 hover:shadow-lg"
+                        style={{ transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}
+                    >
+                        <div className="text-3xl opacity-60 group-hover:opacity-100 transition-opacity duration-500">
                             📖
                         </div>
-                        <h2 className="text-xl md:text-2xl font-light text-white mb-2">
-                            所有文章
-                        </h2>
-                        <p className="text-sm text-white/80 font-light">
-                            瀏覽我們的完整文章庫
-                        </p>
+
+                        <div>
+                            <h2 className="text-xl md:text-2xl font-light text-[var(--brand-ink)] mb-2 group-hover:text-white transition-colors duration-500">
+                                所有文章
+                            </h2>
+                            <p className="text-sm text-[var(--brand-gray)] font-light group-hover:text-white/80 transition-colors duration-500">
+                                瀏覽我們的完整文章庫
+                            </p>
+                        </div>
+
+                        <span className="absolute bottom-8 right-8 text-[var(--brand-red)] group-hover:text-white transition-colors duration-500">
+                            →
+                        </span>
                     </div>
                 </Link>
             </div>
