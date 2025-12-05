@@ -87,7 +87,7 @@ function NavItem({ item }: { item: MenuItemWithChildren }) {
                         <div key={child.id}>
                             <Link
                                 href={toInternalPath(child.url, child.path)}
-                                className="block px-6 py-2.5 text-sm text-[var(--brand-gray)] hover:text-[var(--brand-ink)] hover:bg-[var(--brand-bg)] transition-all duration-300 whitespace-nowrap"
+                                className="block px-6 py-2.5 text-xs tracking-wider text-[var(--brand-gray)] hover:text-[var(--brand-ink)] hover:bg-[var(--brand-bg)] transition-all duration-300 whitespace-nowrap"
                             >
                                 {child.label}
                             </Link>
@@ -122,7 +122,7 @@ export default function HeaderContent({ menuTree }: HeaderContentProps) {
 
     return (
         <>
-            <header className="fixed w-full z-50 top-0 left-0 bg-[var(--brand-bg)]/95 backdrop-blur-sm border-b border-[var(--brand-line)]">
+            <header className="fixed w-full z-50 top-0 left-0 bg-[var(--brand-bg)] border-b border-[var(--brand-line)]">
                 <div className="max-w-[1600px] mx-auto px-6 lg:px-8">
                     <div className="flex justify-between items-center h-20">
                         {/* Logo - 好事發生數位 AI */}
