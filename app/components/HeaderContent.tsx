@@ -40,53 +40,55 @@ function NavItem({ item }: { item: MenuItemWithChildren }) {
             {isLink ? (
                 <Link
                     href={href}
-                    className="hover:text-[var(--brand-ink)] transition-colors duration-700"
+                    className="flex items-center gap-1 hover:text-[var(--brand-ink)] transition-colors duration-700"
                     style={{ transitionTimingFunction: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}
                 >
                     {item.label}
+                    <svg className="w-3 h-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
                 </Link>
             ) : (
-                <span className="cursor-pointer hover:text-[var(--brand-ink)] transition-colors duration-700">
+                <span className="flex items-center gap-1 cursor-pointer hover:text-[var(--brand-ink)] transition-colors duration-700">
                     {item.label}
+                    <svg className="w-3 h-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
                 </span>
             )}
 
-            {/* Dropdown - Design System v2.0 spacing */}
+            {/* Dropdown - 置中對齊，扁平化設計 */}
             <div
-                className="absolute top-full right-0 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible z-50"
+                className="absolute top-full left-1/2 -translate-x-1/2 pt-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible z-50"
                 style={{
-                    transition: 'opacity 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94), visibility 700ms'
+                    transition: 'opacity 500ms cubic-bezier(0.25, 0.46, 0.45, 0.94), visibility 500ms'
                 }}
             >
-                <div className="bg-[var(--brand-bg)] border border-[var(--brand-line)] py-6 px-8 min-w-[240px]">
-                    <div className="space-y-4">
-                        {item.children.map((child) => (
-                            <div key={child.id}>
-                                <Link
-                                    href={toInternalPath(child.url, child.path)}
-                                    className="flex items-center gap-3 text-sm text-[var(--brand-gray)] hover:text-[var(--brand-ink)] transition-colors duration-500 whitespace-nowrap py-1 group/item"
-                                    style={{ transition: 'color 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}
-                                >
-                                    <span className="w-1.5 h-1.5 rounded-full bg-[var(--brand-ink)] opacity-80 group-hover/item:bg-[var(--brand-red)]" style={{ transition: 'background-color 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94)' }} />
-                                    {child.label}
-                                </Link>
-                                {child.children.length > 0 && (
-                                    <div className="pl-4 mt-3 space-y-3 border-l border-[var(--brand-line)]">
-                                        {child.children.map((grandchild) => (
-                                            <Link
-                                                key={grandchild.id}
-                                                href={toInternalPath(grandchild.url, grandchild.path)}
-                                                className="block text-xs text-[var(--brand-gray)] hover:text-[var(--brand-ink)] transition-colors duration-500 whitespace-nowrap py-1"
-                                                style={{ transition: 'color 700ms cubic-bezier(0.25, 0.46, 0.45, 0.94)' }}
-                                            >
-                                                {grandchild.label}
-                                            </Link>
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                        ))}
-                    </div>
+                <div className="bg-white border border-[var(--brand-line)] shadow-lg py-3 min-w-[200px]">
+                    {item.children.map((child) => (
+                        <div key={child.id}>
+                            <Link
+                                href={toInternalPath(child.url, child.path)}
+                                className="block px-6 py-2.5 text-sm text-[var(--brand-gray)] hover:text-[var(--brand-ink)] hover:bg-[var(--brand-bg)] transition-all duration-300 whitespace-nowrap"
+                            >
+                                {child.label}
+                            </Link>
+                            {/* 第三層子選單 */}
+                            {child.children.length > 0 && (
+                                <div className="bg-[var(--brand-bg)]/50">
+                                    {child.children.map((grandchild) => (
+                                        <Link
+                                            key={grandchild.id}
+                                            href={toInternalPath(grandchild.url, grandchild.path)}
+                                            className="block px-8 py-2 text-xs text-[var(--brand-gray)] hover:text-[var(--brand-ink)] transition-colors duration-300 whitespace-nowrap"
+                                        >
+                                            {grandchild.label}
+                                        </Link>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    ))}
                 </div>
             </div>
         </div>
