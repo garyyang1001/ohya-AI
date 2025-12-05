@@ -91,7 +91,25 @@ export default function MobileMenu({ isOpen, onClose, menuItems }: MobileMenuPro
                                         className={`transform transition-all duration-700 delay-[${index * 50}ms] w-full ${isOpen ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'
                                             }`}
                                     >
-                                        <div className="flex items-center justify-center gap-2">
+                                        {hasChildren ? (
+                                            // 有子選單：點擊整個區域展開
+                                            <button
+                                                onClick={() => toggleExpand(item.id)}
+                                                className="flex items-center justify-center gap-3 text-2xl md:text-3xl font-light text-[var(--brand-ink)] hover:text-[var(--brand-gray)] tracking-widest transition-colors duration-300"
+                                            >
+                                                <span>{item.label}</span>
+                                                <svg
+                                                    className={`w-5 h-5 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    viewBox="0 0 24 24"
+                                                    strokeWidth={1.5}
+                                                >
+                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                                                </svg>
+                                            </button>
+                                        ) : (
+                                            // 沒有子選單：直接導航
                                             <Link
                                                 href={toInternalPath(item.url, item.path)}
                                                 onClick={onClose}
@@ -99,26 +117,7 @@ export default function MobileMenu({ isOpen, onClose, menuItems }: MobileMenuPro
                                             >
                                                 {item.label}
                                             </Link>
-
-                                            {/* Expand/Collapse Arrow */}
-                                            {hasChildren && (
-                                                <button
-                                                    onClick={() => toggleExpand(item.id)}
-                                                    className="p-2 text-[var(--brand-gray)] hover:text-[var(--brand-ink)] transition-colors duration-300"
-                                                    aria-label={isExpanded ? '收合子選單' : '展開子選單'}
-                                                >
-                                                    <svg
-                                                        className={`w-5 h-5 transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}
-                                                        fill="none"
-                                                        stroke="currentColor"
-                                                        viewBox="0 0 24 24"
-                                                        strokeWidth={1.5}
-                                                    >
-                                                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                                                    </svg>
-                                                </button>
-                                            )}
-                                        </div>
+                                        )}
 
                                         {/* Submenu - Collapsible */}
                                         {hasChildren && (
