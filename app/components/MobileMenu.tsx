@@ -75,23 +75,6 @@ export default function MobileMenu({ isOpen, onClose, menuItems }: MobileMenuPro
             {/* Background Texture */}
             <div className="absolute inset-0 paper-texture opacity-50 pointer-events-none" />
 
-            {/* Close Button */}
-            <button
-                onClick={onClose}
-                className="absolute top-6 right-6 p-2 text-[var(--brand-ink)] hover:opacity-70 transition-opacity duration-300 z-50"
-                aria-label="關閉選單"
-            >
-                <svg
-                    className="w-8 h-8"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1}
-                >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-
             {/* Menu Content Wrapper - Handles Scroll */}
             <div className="h-full overflow-y-auto">
                 {/* Flex Container - Handles Centering & Expansion */}
