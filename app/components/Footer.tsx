@@ -135,7 +135,7 @@ export default async function Footer() {
                         >
                             Follow Us
                         </h4>
-                        <div className="flex flex-wrap gap-4">
+                        <div className="flex flex-wrap gap-4 mb-8">
                             {socialLinks.map((link) => (
                                 <a
                                     key={link.name}
@@ -148,6 +148,22 @@ export default async function Footer() {
                                     {getIcon(link.icon)}
                                 </a>
                             ))}
+                        </div>
+
+                        {/* Brand Guideline Link */}
+                        <div>
+                            <h4
+                                className="text-xs tracking-widest text-[var(--brand-gray)] uppercase mb-4"
+                                style={{ fontFamily: 'Lato, sans-serif' }}
+                            >
+                                Brand Guideline
+                            </h4>
+                            <Link
+                                href="/brand-guidelines"
+                                className="text-sm text-[var(--brand-gray)] font-light hover:text-[var(--brand-ink)] transition-colors duration-500 block"
+                            >
+                                好事發生網頁設計規範
+                            </Link>
                         </div>
                     </div>
 
