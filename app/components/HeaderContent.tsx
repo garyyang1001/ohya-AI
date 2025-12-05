@@ -4,17 +4,35 @@ import Link from 'next/link';
 import { useState } from 'react';
 import MobileMenu, { MenuItemWithChildren } from './MobileMenu';
 
-// Helper to convert URL
+// Helper to convert WordPress URL/path to Next.js path
 function toInternalPath(url: string | null, path: string | null): string {
-    if (path && path !== '#') return path;
-    if (!url || url === '#') return '#';
+    let pathname = path && path !== '#' ? path : null;
 
-    try {
-        const urlObj = new URL(url);
-        return urlObj.pathname || '/';
-    } catch {
-        return url.startsWith('/') ? url : '/';
+    if (!pathname && url && url !== '#') {
+        try {
+            const urlObj = new URL(url);
+            pathname = urlObj.pathname;
+        } catch {
+            // 如果 url 不是完整網址，嘗試作為路徑處理
+            pathname = url;
+        }
     }
+
+    if (!pathname || pathname === '#') return '#';
+
+    // 正規化：確保開頭有斜線，移除結尾斜線
+    if (!pathname.startsWith('/')) pathname = '/' + pathname;
+    if (pathname.endsWith('/') && pathname !== '/') pathname = pathname.slice(0, -1);
+
+    // 處理 WordPress 分類連結 → Next.js 路由
+    // /category/parent/child → /blog/category/child (取最後一個 slug)
+    if (pathname.startsWith('/category/')) {
+        const parts = pathname.split('/').filter(Boolean); // e.g. ['category', 'parent', 'child']
+        const slug = parts[parts.length - 1];
+        return `/blog/category/${slug}`;
+    }
+
+    return pathname;
 }
 
 // NavItem Component

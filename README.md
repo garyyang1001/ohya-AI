@@ -23,8 +23,36 @@
 **設計原則**：
 - **字體**：Noto Serif TC (主要), Lato (功能性小字)
 - **排版**：8pt 間距系統 (Spacing System)
-- **視覺**：極簡留白、極細線 (0.5px)、低飽和度圖片
+- **視覺**：極簡留白、極細線 (0.5px)、低飽和度圖片、扁平化卡片
 - **動效**：700ms cubic-bezier(0.25, 0.46, 0.45, 0.94)
+
+---
+
+## ✅ 目前進度 (Current Status)
+
+### 1. 核心頁面
+- [x] **首頁 (Home)**: Hero, Services, Blog, Testimonial 區塊完成
+- [x] **AI SEO Marketing**: `/ai-seo-marketing` (移植自 `index (1).html`)
+- [x] **作品集**: `/portfolio` (靜態頁面)
+- [x] **聯繫我們**: `/contact-us` (靜態頁面)
+
+### 2. 導航系統 (Navigation)
+- [x] **Header**:
+    - [x] Logo 更新 (好事發生數位 AI)
+    - [x] **Desktop Menu**: 置中下拉選單、扁平化設計、箭頭指示
+    - [x] **Mobile Menu**: 左對齊設計、點擊父層展開子選單、底部社群連結 (FB, Threads, YT)
+    - [x] **連結修復**: 自動將 WordPress 分類連結 (`/category/xxx`) 映射至 `/blog/category/xxx`
+
+### 3. 部落格系統 (Blog System)
+- [x] **文章列表 (`/blog`)**: 白色卡片風格、品牌色邊框、Hover 效果
+- [x] **分類頁面 (`/blog/category/[slug]`)**: 動態抓取分類文章
+- [x] **文章內頁 (`/blog/[slug]`)**: Averi.ai 風格、特色圖片圓角、麵包屑導航
+- [x] **所有文章 (`/blog/all`)**: 顯示所有文章列表
+
+### 4. 性能優化 (Performance)
+- [x] **CSS 優化**: 啟用 `experimental.optimizeCss` (critters)
+- [x] **Bundle 優化**: 配置 `browserslist` 減少 polyfills
+- [x] **生產環境**: 自動移除 `console.log`
 
 ---
 
@@ -34,76 +62,31 @@
 frontend/
 ├── app/
 │   ├── components/
-│   │   ├── Header.tsx    # 全站 Header (動態選單 + Dropdown)
-│   │   └── Footer.tsx    # 全站 Footer (完整資訊 + 社群)
-│   ├── hooks/
-│   │   └── useAnimations.ts
-│   ├── [...slug]/
-│   │   └── page.tsx      # 動態路由 (文章/頁面)
-│   ├── layout.tsx        # 根 Layout (含 Header/Footer)
-│   ├── page.tsx          # 首頁 (Hero, Services, Blog, Testimonial)
-│   └── globals.css       # 設計系統 (CSS Variables & Utilities)
-├── graphql/queries/      # GraphQL 查詢定義
-├── gql/                  # Codegen 產生的類型
-├── codegen.ts            # GraphQL Codegen 設定
-└── next.config.mjs       # Next.js 設定
+│   │   ├── Header.tsx        # Server Component (Fetch Menu)
+│   │   ├── HeaderContent.tsx # Client Component (UI & Logic)
+│   │   ├── MobileMenu.tsx    # 手機版選單 (含連結轉換邏輯)
+│   │   └── BlogCard.tsx      # 部落格卡片組件
+│   ├── blog/
+│   │   ├── page.tsx          # 部落格首頁 (分類列表)
+│   │   ├── all/              # 所有文章列表
+│   │   └── category/[slug]/  # 分類文章列表
+│   ├── [slug]/               # 頁面動態路由
+│   └── globals.css           # 全域樣式 & Tailwind 設定
+├── graphql/queries/          # GraphQL 查詢字串
+└── next.config.mjs           # Next.js 設定 (含 Image Domains)
 ```
-
----
-
-## ✅ 已完成 (Design System v2.0 Redesign)
-
-### 核心系統
-- [x] Next.js 15 專案初始化
-- [x] GraphQL Codegen 設定
-- [x] `globals.css` 全面更新 (Colors, Typography, 8pt Grid)
-
-### Header & Footer
-- [x] **Header**: 
-    - [x] Logo 更新 (好事發生數位 AI)
-    - [x] WordPress 動態選單整合
-    - [x] Dropdown 樣式優化 (8pt spacing, dots indicator)
-- [x] **Footer**: 
-    - [x] 完整聯絡資訊 & 社群連結 (FB, Threads, YT, Skool)
-    - [x] Since 2018
-
-### 首頁 (Homepage)
-- [x] **Hero Section**: 修正標題斷行，按鈕改為「查看服務」
-- [x] **Services Section**: Option B 設計 (大數字 + Icons + 箭頭提示)
-- [x] **Blog Section**: 顯示最新 3 篇文章 (灰階圖片 + Hover 彩色)
-- [x] **Testimonial**: 阿玩旅遊案例
-- [x] **區塊分離**: 服務項目與特色區塊獨立
-
----
-
-## 📋 待完成
-
-### Phase 2: 手機版體驗
-- [ ] **Mobile Menu**: 實作漢堡選單展開/收合功能
-- [ ] RWD 調整: 確保所有區塊在手機上顯示正常
-
-### Phase 3: 部落格系統
-- [ ] **文章列表頁 (`/blog`)**: 網格佈局、分頁
-- [ ] **文章內頁 (`/[slug]`)**: 標題、Meta、內容樣式
-- [ ] **分類與標籤頁**: `/category/[slug]`, `/tag/[slug]`
-
-### Phase 4: SEO & 優化
-- [ ] 動態 Metadata (Title, Description, OG Image)
-- [ ] Sitemap 生成
-- [ ] 404 頁面設計
-- [ ] Loading 狀態優化
 
 ---
 
 ## 🔧 常用指令
 
 ```bash
-# 開發
+# 開發 (Port 3000 被佔用時會自動切換)
 cd frontend
 npm run dev
 
-# GraphQL 類型重新生成
-npm run codegen
+# 構建測試
+npm run build
 
 # 推送到 GitHub (觸發 Zeabur 自動部署)
 git add -A && git commit -m "message" && git push
@@ -111,16 +94,17 @@ git add -A && git commit -m "message" && git push
 
 ---
 
-## 🔗 相關連結
+## 📝 下一步待辦 (Next Steps)
 
-- **GitHub**: https://github.com/garyyang1001/ohya-AI
-- **Zeabur**: (部署後的網址)
-- **WordPress GraphQL**: https://ohya.co/graphql
+1. **SEO 細部優化**: 檢查各頁面的 Meta Tags (Title, Description, OG Image)
+2. **404 頁面**: 設計自定義 404 頁面
+3. **Loading 狀態**: 優化頁面切換時的 Loading 效果
+4. **內容遷移**: 確認所有 WordPress 舊文章的圖片和格式在 Next.js 中顯示正常
 
 ---
 
-## 📝 開發備註
+## 🔗 相關連結
 
-1. **圖片來源**：`next.config.mjs` 已設定允許 `ohya.co` 的遠端圖片
-2. **Menu 資料**：Header 從 WordPress `MENU_1` 抓取
-3. **快取策略**：Menu 資料快取 **60 秒** (`revalidate: 60`) 以便快速同步
+- **GitHub**: https://github.com/garyyang1001/ohya-AI
+- **Zeabur**: https://ohya-new.zeabur.app
+- **WordPress GraphQL**: https://ohya.co/graphql
