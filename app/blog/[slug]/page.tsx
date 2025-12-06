@@ -3,9 +3,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-// Force dynamic rendering - skip pre-render during build
-export const dynamic = 'force-dynamic';
-
 // Fetch data
 async function getPost(slug: string) {
     const res = await fetch(process.env.NEXT_PUBLIC_WORDPRESS_API_URL as string, {

@@ -6,9 +6,6 @@ import type {
   GetAllPageSlugsQuery
 } from '@/gql/graphql';
 
-// Force dynamic rendering - skip pre-render during build
-export const dynamic = 'force-dynamic';
-
 // GraphQL Queries
 const GET_PAGE_BY_URI = `
   query GetPageBySlug($slug: ID!) {

@@ -4,9 +4,6 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowDown, Check, Monitor, Smartphone, Tablet } from 'lucide-react';
 
-// Force dynamic rendering - skip pre-render during build
-export const dynamic = 'force-dynamic';
-
 // Since this is a client component for now (interactive elements might be added), 
 // we can't export metadata directly if we use 'use client'. 
 // However, for a simple static page, we can remove 'use client' if no hooks are used.

@@ -9,9 +9,6 @@ import PricingSection from './components/PricingSection';
 import FAQSection from './components/FAQSection';
 import CTASection from './components/CTASection';
 
-// Force dynamic rendering - skip pre-render during build
-export const dynamic = 'force-dynamic';
-
 export const metadata: Metadata = {
     title: 'AI導入企業顧問服務 | 好事發生數位',
     description: '不知道如何將 AI 導入企業？我們協助中小企業主釐清需求、規劃架構、並實際建置。從流程診斷到團隊賦能，打造專屬的 AI 轉型藍圖。',
