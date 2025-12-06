@@ -5,6 +5,9 @@ import Image from 'next/image';
 import { useScrollFadeIn } from './hooks/useAnimations';
 import { useEffect, useState } from 'react';
 
+// Force dynamic rendering - skip pre-render during build
+export const dynamic = 'force-dynamic';
+
 // Types
 interface Post {
     id: string;

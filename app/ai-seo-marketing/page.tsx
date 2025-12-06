@@ -1,6 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+// Force dynamic rendering - skip pre-render during build
+export const dynamic = 'force-dynamic';
+
 export const metadata = {
     title: 'AI SEO 自動化行銷 | 好事發生數位',
     description: '複製一個「數位分身」，讓它 24 小時全自動幫你經營內容行銷。用不到真人團隊 1/10 的成本，獲得專業級的內容產出。',
