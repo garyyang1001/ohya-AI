@@ -25,19 +25,28 @@ interface Post {
 
 // 取得所有文章
 async function getAllPosts(): Promise<Post[]> {
-    const res = await fetch(process.env.NEXT_PUBLIC_WORDPRESS_API_URL as string, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            query: GET_POSTS,
-            variables: { first: 50 }
-        }),
-        next: { revalidate: false },
-    });
+    try {
+        const res = await fetch(process.env.NEXT_PUBLIC_WORDPRESS_API_URL as string, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                query: GET_POSTS,
+                variables: { first: 50 }
+            }),
+            next: { revalidate: false },
+        });
 
-    if (!res.ok) return [];
-    const json = await res.json();
-    return json.data?.posts?.nodes || [];
+        if (!res.ok) {
+            console.error(`Failed to fetch posts: ${res.status}`);
+            return [];
+        }
+
+        const json = await res.json();
+        return json.data?.posts?.nodes || [];
+    } catch (error) {
+        console.error('Error fetching posts:', error);
+        return [];
+    }
 }
 
 export default async function AllPostsPage() {

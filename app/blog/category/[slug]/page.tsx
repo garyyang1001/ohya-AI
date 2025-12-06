@@ -30,19 +30,28 @@ interface CategoryData {
 
 // 取得分類及其文章
 async function getCategoryWithPosts(slug: string): Promise<CategoryData | null> {
-    const res = await fetch(process.env.NEXT_PUBLIC_WORDPRESS_API_URL as string, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            query: GET_POSTS_BY_CATEGORY,
-            variables: { slug, first: 20 }
-        }),
-        next: { revalidate: false },
-    });
+    try {
+        const res = await fetch(process.env.NEXT_PUBLIC_WORDPRESS_API_URL as string, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                query: GET_POSTS_BY_CATEGORY,
+                variables: { slug, first: 20 }
+            }),
+            next: { revalidate: false },
+        });
 
-    if (!res.ok) return null;
-    const json = await res.json();
-    return json.data?.category;
+        if (!res.ok) {
+            console.error(`Failed to fetch category posts: ${res.status}`);
+            return null;
+        }
+
+        const json = await res.json();
+        return json.data?.category || null;
+    } catch (error) {
+        console.error('Error fetching category posts:', error);
+        return null;
+    }
 }
 
 // Metadata

@@ -5,19 +5,28 @@ import { notFound } from 'next/navigation';
 
 // Fetch data
 async function getPost(slug: string) {
-    const res = await fetch(process.env.NEXT_PUBLIC_WORDPRESS_API_URL as string, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            query: GET_POST_BY_SLUG,
-            variables: { slug }
-        }),
-        next: { revalidate: false },
-    });
+    try {
+        const res = await fetch(process.env.NEXT_PUBLIC_WORDPRESS_API_URL as string, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                query: GET_POST_BY_SLUG,
+                variables: { slug }
+            }),
+            next: { revalidate: false },
+        });
 
-    if (!res.ok) return null;
-    const json = await res.json();
-    return json.data?.post;
+        if (!res.ok) {
+            console.error(`Failed to fetch post: ${res.status}`);
+            return null;
+        }
+
+        const json = await res.json();
+        return json.data?.post || null;
+    } catch (error) {
+        console.error('Error fetching post:', error);
+        return null;
+    }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
