@@ -3,6 +3,9 @@ import BlogCard from '@/app/components/BlogCard';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+// Force dynamic rendering - skip pre-render during build
+export const dynamic = 'force-dynamic';
+
 // 類型定義
 interface Post {
     id: string;

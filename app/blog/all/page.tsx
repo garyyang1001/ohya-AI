@@ -2,6 +2,9 @@ import { GET_POSTS } from '@/graphql/queries/GetPosts';
 import BlogCard from '@/app/components/BlogCard';
 import Link from 'next/link';
 
+// Force dynamic rendering - skip pre-render during build
+export const dynamic = 'force-dynamic';
+
 // 類型定義
 interface Post {
     id: string;
@@ -32,7 +35,7 @@ async function getAllPosts(): Promise<Post[]> {
             query: GET_POSTS,
             variables: { first: 50 }
         }),
-        next: { revalidate: 60 },
+        next: { revalidate: false },
     });
 
     if (!res.ok) return [];

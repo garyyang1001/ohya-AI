@@ -1,6 +1,9 @@
 import Link from 'next/link';
 import { GET_CATEGORIES } from '@/graphql/queries/GetPosts';
 
+// Force dynamic rendering - skip pre-render during build
+export const dynamic = 'force-dynamic';
+
 // 分類資料類型
 interface Category {
     id: string;
