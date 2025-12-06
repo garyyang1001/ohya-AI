@@ -1,110 +1,62 @@
-# WannaVegTour Headless CMS 專案
+# Headless CMS Frontend (Next.js App Router)
 
-## 📌 專案概述
+這是一個基於 Next.js 14+ App Router 的 Headless WordPress 前端專案。
 
-將 ohya.co 由傳統 WordPress 遷移為 **Headless CMS 架構**：
-- **前端**：Next.js 15 (App Router) 部署於 Zeabur
-- **後端**：WordPress (WPGraphQL) 作為 CMS
+## 🚀 部署關鍵設定 (Deployment Checklist)
 
----
+### 1. 環境變數 (Environment Variables)
 
-## 🎨 設計系統 (Design System v2.0)
+在 Zeabur (或其他部署平台) 必須設定以下變數，否則 Build 會失敗或選單消失。
 
-基於 `Design-CI.html` 的全新品牌識別：
+| 變數名稱 | 範例值 | 說明 |
+| --- | --- | --- |
+| `NEXT_PUBLIC_WORDPRESS_API_URL` | `https://cms.ohya.co/graphql` | **重要**：請確認是 WordPress 的正確網址 (通常是 `cms.` 子網域)，不要少打 `/graphql`。 |
+| `REVALIDATE_SECRET` | `(your-secret-token)` | 用於 On-Demand Revalidation 的密鑰。 |
 
-```css
---brand-bg: #F5F5F3;      /* 再生紙白 (60%) */
---brand-ink: #2B2B2B;     /* 墨黑 (30%) */
---brand-gray: #7A7A7A;    /* 石墨灰 (8%) */
---brand-line: #E0E0E0;    /* 極細分隔線 */
---brand-red: #8C3A3A;     /* 印泥紅 (2% 強調) */
-```
+### 2. On-Demand Revalidation 架構
 
-**設計原則**：
-- **字體**：Noto Serif TC (主要), Lato (功能性小字)
-- **排版**：8pt 間距系統 (Spacing System)
-- **視覺**：極簡留白、極細線 (0.5px)、低飽和度圖片、扁平化卡片
-- **動效**：700ms cubic-bezier(0.25, 0.46, 0.45, 0.94)
+本專案採用 **Pure On-Demand Revalidation** 策略：
 
----
+*   **Caching**: 所有 fetch 請求預設 `revalidate: false` (永久快取)。
+*   **Trigger**: 依賴 WordPress Webhook 觸發 `api/revalidate` 來更新內容。
+*   **優點**: 極大化前端效能 (全靜態 HTML)，極小化後端負載。
 
-## ✅ 目前進度 (Current Status)
-
-### 1. 核心頁面
-- [x] **首頁 (Home)**: Hero, Services, Blog, Testimonial 區塊完成
-- [x] **AI SEO Marketing**: `/ai-seo-marketing` (移植自 `index (1).html`)
-- [x] **作品集**: `/portfolio` (靜態頁面)
-- [x] **聯繫我們**: `/contact-us` (靜態頁面)
-
-### 2. 導航系統 (Navigation)
-- [x] **Header**:
-    - [x] Logo 更新 (好事發生數位 AI)
-    - [x] **Desktop Menu**: 置中下拉選單、扁平化設計、箭頭指示
-    - [x] **Mobile Menu**: 左對齊設計、點擊父層展開子選單、底部社群連結 (FB, Threads, YT)
-    - [x] **連結修復**: 自動將 WordPress 分類連結 (`/category/xxx`) 映射至 `/blog/category/xxx`
-
-### 3. 部落格系統 (Blog System)
-- [x] **文章列表 (`/blog`)**: 白色卡片風格、品牌色邊框、Hover 效果
-- [x] **分類頁面 (`/blog/category/[slug]`)**: 動態抓取分類文章
-- [x] **文章內頁 (`/blog/[slug]`)**: Averi.ai 風格、特色圖片圓角、麵包屑導航
-- [x] **所有文章 (`/blog/all`)**: 顯示所有文章列表
-
-### 4. 性能優化 (Performance)
-- [x] **CSS 優化**: 啟用 `experimental.optimizeCss` (critters)
-- [x] **Bundle 優化**: 配置 `browserslist` 減少 polyfills
-- [x] **生產環境**: 自動移除 `console.log`
+**⚠️ 注意事項**：
+*   如果 Build 的時候 WordPress 掛掉 (502)，頁面會顯示 Fallback 內容 (例如預設選單)。
+*   解決方法：確認 WordPress 恢復後，觸發一次 Webhook 或重新部署。
 
 ---
 
-## 📁 專案結構
+## �️ 開發與除錯
 
-```
-frontend/
-├── app/
-│   ├── components/
-│   │   ├── Header.tsx        # Server Component (Fetch Menu)
-│   │   ├── HeaderContent.tsx # Client Component (UI & Logic)
-│   │   ├── MobileMenu.tsx    # 手機版選單 (含連結轉換邏輯)
-│   │   └── BlogCard.tsx      # 部落格卡片組件
-│   ├── blog/
-│   │   ├── page.tsx          # 部落格首頁 (分類列表)
-│   │   ├── all/              # 所有文章列表
-│   │   └── category/[slug]/  # 分類文章列表
-│   ├── [slug]/               # 頁面動態路由
-│   └── globals.css           # 全域樣式 & Tailwind 設定
-├── graphql/queries/          # GraphQL 查詢字串
-└── next.config.mjs           # Next.js 設定 (含 Image Domains)
-```
+### 常見錯誤排除
 
----
+**Q: 為什麼選單不見了？**
+A: 這通常是因為在 Build Time 時，WordPress 回傳錯誤 (502/404)。
+*   檢查 `NEXT_PUBLIC_WORDPRESS_API_URL` 是否正確。
+*   檢查 WordPress 是否活著。
+*   Header 有內建 `FALLBACK_MENU`，如果連這個都沒出來，代表環境變數完全沒吃到。
 
-## 🔧 常用指令
+**Q: Build 失敗 `undefined reading toString`？**
+A: 通常是因為 `fetch` 失敗導致資料為 `null`，而後續程式碼嘗試讀取它。
+*   我們已經在全域 `fetchGraphQL` 加上 `try-catch` 防護。
+*   請檢查後端網址是否正確。
+
+### 指令
 
 ```bash
-# 開發 (Port 3000 被佔用時會自動切換)
-cd frontend
+# 安裝依賴
+npm install
+
+# 本地開發
 npm run dev
 
-# 構建測試
+# 建置 (測試 SSG 生成)
 npm run build
-
-# 推送到 GitHub (觸發 Zeabur 自動部署)
-git add -A && git commit -m "message" && git push
 ```
 
----
+## 📂 專案結構
 
-## 📝 下一步待辦 (Next Steps)
-
-1. **SEO 細部優化**: 檢查各頁面的 Meta Tags (Title, Description, OG Image)
-2. **404 頁面**: 設計自定義 404 頁面
-3. **Loading 狀態**: 優化頁面切換時的 Loading 效果
-4. **內容遷移**: 確認所有 WordPress 舊文章的圖片和格式在 Next.js 中顯示正常
-
----
-
-## 🔗 相關連結
-
-- **GitHub**: https://github.com/garyyang1001/ohya-AI
-- **Zeabur**: https://ohya-new.zeabur.app
-- **WordPress GraphQL**: https://ohya.co/graphql
+*   `app/components/Header.tsx`: 包含 Menu Fetch 邏輯與 Fallback Menu。
+*   `app/[...slug]/page.tsx`: 通用頁面渲染 (Page/Post)。
+*   `app/api/revalidate/route.ts`: 接收 WordPress Webhook 的 API。
