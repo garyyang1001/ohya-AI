@@ -94,14 +94,14 @@ async function fetchContent(uri: string) {
   // Try Page first
   const pageData = await fetchGraphQL(GET_PAGE_BY_URI, { slug: uri });
 
-  if (pageData.data?.page) {
+  if (pageData?.data?.page) {
     return { type: 'page' as const, data: pageData.data as GetPageBySlugQuery };
   }
 
   // Fallback to Post
   const postData = await fetchGraphQL(GET_POST_BY_URI, { slug: uri });
 
-  if (postData.data?.post) {
+  if (postData?.data?.post) {
     return { type: 'post' as const, data: postData.data as GetPostBySlugQuery };
   }
 
