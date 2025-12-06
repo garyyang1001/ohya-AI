@@ -12,7 +12,7 @@ async function getPost(slug: string) {
             query: GET_POST_BY_SLUG,
             variables: { slug }
         }),
-        next: { revalidate: 60 },
+        next: { revalidate: false },
     });
 
     if (!res.ok) return null;

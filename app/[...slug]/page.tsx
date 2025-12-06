@@ -75,11 +75,12 @@ async function fetchGraphQL(query: string, variables?: Record<string, any>) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ query, variables }),
-    next: { revalidate: 60 },
-  } as RequestInit & { next?: { revalidate?: number } });
+    next: { revalidate: false },
+  } as RequestInit & { next?: { revalidate?: number | false } });
 
   if (!res.ok) {
-    throw new Error('Failed to fetch from GraphQL');
+    console.error(`GraphQL fetch failed: ${res.status}`);
+    return null;
   }
 
   return res.json();

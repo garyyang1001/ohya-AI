@@ -37,7 +37,7 @@ async function getCategoryWithPosts(slug: string): Promise<CategoryData | null> 
             query: GET_POSTS_BY_CATEGORY,
             variables: { slug, first: 20 }
         }),
-        next: { revalidate: 60 },
+        next: { revalidate: false },
     });
 
     if (!res.ok) return null;
