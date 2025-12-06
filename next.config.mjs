@@ -4,7 +4,7 @@ const nextConfig = {
 
   // 性能優化
   experimental: {
-    optimizeCss: true, // 優化 CSS 輸出
+    optimizeCss: false, // 優化 CSS 輸出
   },
 
   // 現代瀏覽器編譯目標 (減少 polyfills)
