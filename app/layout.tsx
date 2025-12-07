@@ -11,8 +11,8 @@ const notoSerifTC = Noto_Serif_TC({
 });
 
 export const metadata: Metadata = {
-    title: "好事發生數位",
-    description: "WordPress網站設計、SEO行銷、LinkedIn行銷",
+    title: "Ohya Digital",
+    description: "WordPress Web Design, SEO Marketing, LinkedIn Marketing",
 };
 
 export default function RootLayout({
