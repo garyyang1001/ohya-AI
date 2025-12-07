@@ -2,6 +2,33 @@
 
 這是一個基於 Next.js 14+ App Router 的 Headless WordPress 前端專案。
 
+---
+
+## ⚠️ 初學者必讀：快取策略的大地雷
+
+> **這是 Headless CMS 最容易踩到的坑！** 如果你發現「WordPress 明明更新了，但前台沒變」，99% 是快取策略設錯。
+
+### ❌ 錯誤做法：Time-based ISR
+```typescript
+// 這樣會每 60 秒自動重新驗證，但：
+// 1. 更新不即時 (最慢要等 60 秒)
+// 2. 伺服器持續運算，浪費資源
+next: { revalidate: 60 }
+```
+
+### ✅ 正確做法：Tag-based On-Demand Revalidation
+```typescript
+// 這樣頁面是純靜態，只有 WordPress 觸發 Webhook 時才更新
+next: { tags: ['posts'] }
+```
+
+**好處：**
+- 記憶體用量最低（伺服器平常在睡覺）
+- 更新最即時（WordPress 儲存後 1-2 秒前台就變了）
+- 完美符合「內容有變動時再運算 1 次」的設計理念
+
+---
+
 ## 🚀 部署關鍵設定 (Deployment Checklist)
 
 ### 1. 環境變數 (Environment Variables)
@@ -15,19 +42,94 @@
 
 ### 2. On-Demand Revalidation 架構
 
-本專案採用 **Pure On-Demand Revalidation** 策略：
+本專案採用 **Tag-based On-Demand Revalidation** 策略：
 
-*   **Caching**: 所有 fetch 請求預設 `revalidate: false` (永久快取)。
-*   **Trigger**: 依賴 WordPress Webhook 觸發 `api/revalidate` 來更新內容。
-*   **優點**: 極大化前端效能 (全靜態 HTML)，極小化後端負載。
+*   **Caching**: 所有 fetch 請求使用 `next: { tags: [...] }` (永久快取 + 標籤)。
+*   **Trigger**: 依賴 WordPress Webhook 觸發 `api/revalidate` 並使用 `revalidateTag()` 精準清除快取。
+*   **優點**: 極大化前端效能 (全靜態 HTML)，極小化後端負載，更新即時 (1-2 秒)。
 
-**⚠️ 注意事項**：
-*   如果 Build 的時候 WordPress 掛掉 (502)，頁面會顯示 Fallback 內容 (例如預設選單)。
-*   解決方法：確認 WordPress 恢復後，觸發一次 Webhook 或重新部署。
+#### Cache Tags 對照表
+
+| 頁面 | Tags |
+|------|------|
+| `/blog` | `posts`, `categories` |
+| `/blog/[slug]` | `posts` |
+| `/blog/all` | `posts` |
+| `/blog/category/[slug]` | `posts`, `categories` |
+| `/[...slug]` (Page/Post) | `pages`, `posts` |
+| Header Menu | `menus` |
+
+#### API 使用方式
+
+```bash
+# GET (單一 tag) - WordPress Webhook 用
+GET /api/revalidate?secret=xxx&tag=posts
+
+# POST (多 tags)
+POST /api/revalidate
+Header: x-revalidate-secret: xxx
+Body: { "tags": ["posts", "categories"] }
+```
 
 ---
 
-## �️ 開發與除錯
+## 🔗 WordPress Webhook 設定
+
+在 WordPress 的 `functions.php` 加入以下代碼，支援 Post/Page/Menu/Media 的 新增/更新/刪除：
+
+```php
+<?php
+/**
+ * Next.js On-Demand Revalidation
+ */
+define('NEXTJS_FRONTEND_URL', 'https://你的前台網域');
+define('NEXTJS_REVALIDATE_SECRET', '你的REVALIDATE_SECRET');
+
+function nextjs_revalidate_tags($tags) {
+    if (empty($tags)) return;
+    wp_remote_post(NEXTJS_FRONTEND_URL . '/api/revalidate', [
+        'timeout' => 5,
+        'blocking' => false,
+        'headers' => [
+            'Content-Type' => 'application/json',
+            'x-revalidate-secret' => NEXTJS_REVALIDATE_SECRET,
+        ],
+        'body' => json_encode(['tags' => $tags]),
+    ]);
+}
+
+// Post
+add_action('save_post', function($post_id, $post) {
+    if (wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) return;
+    if ($post->post_type === 'post') nextjs_revalidate_tags(['posts', 'categories']);
+    if ($post->post_type === 'page') nextjs_revalidate_tags(['pages']);
+}, 10, 2);
+
+add_action('wp_trash_post', function($post_id) {
+    $type = get_post_type($post_id);
+    if ($type === 'post') nextjs_revalidate_tags(['posts', 'categories']);
+    if ($type === 'page') nextjs_revalidate_tags(['pages']);
+});
+
+add_action('before_delete_post', function($post_id) {
+    $type = get_post_type($post_id);
+    if ($type === 'post') nextjs_revalidate_tags(['posts', 'categories']);
+    if ($type === 'page') nextjs_revalidate_tags(['pages']);
+});
+
+// Menu
+add_action('wp_update_nav_menu', function() { nextjs_revalidate_tags(['menus']); });
+add_action('wp_delete_nav_menu', function() { nextjs_revalidate_tags(['menus']); });
+
+// Media
+add_action('add_attachment', function() { nextjs_revalidate_tags(['media', 'posts', 'pages']); });
+add_action('attachment_updated', function() { nextjs_revalidate_tags(['media', 'posts', 'pages']); });
+add_action('delete_attachment', function() { nextjs_revalidate_tags(['media', 'posts', 'pages']); });
+```
+
+---
+
+## 🛠️ 開發與除錯
 
 ### 常見錯誤排除
 
@@ -59,4 +161,4 @@ npm run build
 
 *   `app/components/Header.tsx`: 包含 Menu Fetch 邏輯與 Fallback Menu。
 *   `app/[...slug]/page.tsx`: 通用頁面渲染 (Page/Post)。
-*   `app/api/revalidate/route.ts`: 接收 WordPress Webhook 的 API。
+*   `app/api/revalidate/route.ts`: 接收 WordPress Webhook 的 API (支援 `revalidateTag`)。
