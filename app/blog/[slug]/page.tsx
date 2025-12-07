@@ -29,14 +29,26 @@ async function getPost(slug: string) {
     }
 }
 
+// Helper function to clean metadata strings
+function cleanMetaString(str: string | null | undefined, maxLength: number = 160): string {
+    if (!str) return '';
+    // Remove HTML tags
+    const cleaned = str.replace(/<[^>]*>/g, '').trim();
+    // Limit length
+    return cleaned.length > maxLength ? cleaned.substring(0, maxLength) + '...' : cleaned;
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
     const post = await getPost(slug);
     if (!post) return {};
 
+    const title = cleanMetaString(post.seo?.title || post.title, 70);
+    const description = cleanMetaString(post.seo?.description || post.excerpt, 160);
+
     return {
-        title: post.seo?.title || post.title,
-        description: post.seo?.description || post.excerpt,
+        title,
+        description,
         openGraph: {
             images: [post.seo?.openGraph?.image?.url || post.featuredImage?.node?.sourceUrl],
         },

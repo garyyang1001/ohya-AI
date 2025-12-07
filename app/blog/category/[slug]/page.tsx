@@ -54,6 +54,15 @@ async function getCategoryWithPosts(slug: string): Promise<CategoryData | null> 
     }
 }
 
+// Helper function to clean metadata strings
+function cleanMetaString(str: string | null | undefined, maxLength: number = 160): string {
+    if (!str) return '';
+    // Remove HTML tags
+    const cleaned = str.replace(/<[^>]*>/g, '').trim();
+    // Limit length
+    return cleaned.length > maxLength ? cleaned.substring(0, maxLength) + '...' : cleaned;
+}
+
 // Metadata
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params;
@@ -61,9 +70,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
     if (!category) return {};
 
+    const title = cleanMetaString(`${category.name} - 好事發生數位`, 70);
+    const description = cleanMetaString(category.description) || `探索 ${category.name} 相關的所有文章`;
+
     return {
-        title: `${category.name} - 好事發生數位`,
-        description: category.description || `探索 ${category.name} 相關的所有文章`,
+        title,
+        description,
     };
 }
 
