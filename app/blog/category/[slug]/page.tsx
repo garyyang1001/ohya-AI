@@ -38,7 +38,7 @@ async function getCategoryWithPosts(slug: string): Promise<CategoryData | null> 
                 query: GET_POSTS_BY_CATEGORY,
                 variables: { slug, first: 20 }
             }),
-            next: { revalidate: false },
+            next: { tags: ['posts', 'categories'] },
         });
 
         if (!res.ok) {

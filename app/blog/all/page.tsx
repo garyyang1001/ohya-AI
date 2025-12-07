@@ -33,7 +33,7 @@ async function getAllPosts(): Promise<Post[]> {
                 query: GET_POSTS,
                 variables: { first: 50 }
             }),
-            next: { revalidate: false },
+            next: { tags: ['posts'] },
         });
 
         if (!res.ok) {

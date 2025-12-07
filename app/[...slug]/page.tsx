@@ -75,7 +75,7 @@ async function fetchGraphQL(query: string, variables?: Record<string, any>) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ query, variables }),
-    next: { revalidate: false },
+    next: { tags: ['pages', 'posts'] },
   } as RequestInit & { next?: { revalidate?: number | false } });
 
   if (!res.ok) {

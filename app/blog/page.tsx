@@ -17,7 +17,7 @@ async function getCategories(): Promise<Category[]> {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ query: GET_CATEGORIES }),
-            next: { revalidate: false },
+            next: { tags: ['posts', 'categories'] },
         });
 
         if (!res.ok) {

@@ -13,7 +13,7 @@ async function getPost(slug: string) {
                 query: GET_POST_BY_SLUG,
                 variables: { slug }
             }),
-            next: { revalidate: false },
+            next: { tags: ['posts'] },
         });
 
         if (!res.ok) {
