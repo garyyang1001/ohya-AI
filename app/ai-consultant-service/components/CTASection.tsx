@@ -15,8 +15,8 @@ export default function CTASection({ data }: CTASectionProps) {
     return (
         <section id="contact-form" className="bg-brand-ink py-24 sm:py-32">
             <div className="container mx-auto px-6 lg:px-8">
-                <div className="mx-auto max-w-2xl text-center">
-                    <h2 className="text-3xl font-light tracking-wide text-brand-bg sm:text-4xl font-serif mb-6 whitespace-pre-line">
+                <div className="mx-auto max-w-2xl text-left md:text-center">
+                    <h2 className="text-3xl font-light tracking-wide text-brand-bg sm:text-4xl font-serif mb-6 whitespace-pre-line leading-relaxed md:leading-normal">
                         準備好開始您的 AI 轉型了嗎？
                     </h2>
                     <p className="text-xl text-white font-medium mb-10 leading-relaxed">

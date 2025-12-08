@@ -11,7 +11,7 @@ export default function FAQSection({ data }: FAQSectionProps) {
     return (
         <section className="bg-white py-24 sm:py-32 border-t border-brand-line">
             <div className="mx-auto max-w-4xl px-6 lg:px-8">
-                <h2 className="text-3xl font-light tracking-wide text-brand-ink sm:text-4xl mb-16 text-center font-serif">
+                <h2 className="text-3xl font-light tracking-wide text-brand-ink sm:text-4xl mb-16 text-left md:text-center font-serif leading-relaxed md:leading-normal">
                     {data.title}
                 </h2>
 

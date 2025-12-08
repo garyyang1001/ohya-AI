@@ -14,9 +14,9 @@ export default function PricingSection({ data }: PricingSectionProps) {
         <section className="bg-white py-24 sm:py-32 border-t border-brand-line">
             <div className="container mx-auto px-6 lg:px-8">
                 {/* Section Header */}
-                <div className="mx-auto max-w-2xl text-center mb-16">
+                <div className="mx-auto max-w-2xl text-left md:text-center mb-16">
                     <span className="tech-tag mb-4">Pricing</span>
-                    <h2 className="text-3xl font-light tracking-wide text-brand-ink sm:text-4xl font-serif mt-4">
+                    <h2 className="text-3xl font-light tracking-wide text-brand-ink sm:text-4xl font-serif mt-4 leading-relaxed md:leading-normal">
                         {data.title}
                     </h2>
                 </div>

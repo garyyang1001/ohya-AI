@@ -17,7 +17,7 @@ export default function SolutionProcess({ solution, process }: SolutionProcessPr
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
                         <div className="max-w-lg">
                             <span className="text-brand-red text-xs font-bold tracking-widest uppercase mb-4 block font-sans">Our Solution</span>
-                            <h2 className="text-3xl font-light tracking-wide text-brand-ink sm:text-4xl font-serif mb-6">
+                            <h2 className="text-3xl font-light tracking-wide text-brand-ink sm:text-4xl font-serif mb-6 leading-relaxed md:leading-normal">
                                 {solution.title}
                             </h2>
                             <p className="text-lg text-brand-gray font-light leading-relaxed">
@@ -47,7 +47,7 @@ export default function SolutionProcess({ solution, process }: SolutionProcessPr
             {/* Process Part */}
             <section className="bg-brand-bg py-24 sm:py-32 border-t border-brand-line paper-texture">
                 <div className="container mx-auto px-6 lg:px-8">
-                    <div className="mb-20 text-center">
+                    <div className="mb-20 text-left md:text-center">
                         <span className="tech-tag mb-4">Workflow</span>
                         <h2 className="text-3xl font-light tracking-wide text-brand-ink sm:text-4xl font-serif mt-4">
                             {process.title}

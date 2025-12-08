@@ -20,8 +20,8 @@ export default function PainPoints({ data }: PainPointsProps) {
     return (
         <section className="bg-brand-bg py-24 border-t border-brand-line paper-texture">
             <div className="container mx-auto px-6 lg:px-8">
-                <div className="mx-auto max-w-2xl text-center mb-16">
-                    <h2 className="text-3xl font-light tracking-wide text-brand-ink sm:text-4xl font-serif mb-6">
+                <div className="mx-auto max-w-2xl text-left md:text-center mb-16">
+                    <h2 className="text-3xl font-light tracking-wide text-brand-ink sm:text-4xl font-serif mb-6 leading-relaxed md:leading-normal">
                         {data.title}
                     </h2>
                     <p className="text-lg text-brand-gray font-light leading-relaxed">

@@ -256,7 +256,7 @@ function BlogSection() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {posts.map((post, index) => (
                         <FadeInSection key={post.id} delay={index * 100}>
-                            <Link href={`/${post.slug}`} className="group block">
+                            <Link href={`/blog/${post.slug}`} className="group block">
                                 {/* Featured Image - Grayscale */}
                                 <div className="relative h-56 overflow-hidden mb-6 bg-[var(--brand-line)]">
                                     {post.featuredImage?.node?.sourceUrl ? (
@@ -326,7 +326,7 @@ export default function Home() {
                     }}
                 />
 
-                <div className="max-w-5xl w-full relative z-10">
+                <div className="max-w-[1600px] w-full mx-auto px-6 lg:px-8 relative z-10">
                     <FadeInSection>
                         {/* Version Badge */}
                         <div className="flex items-center gap-3 mb-8">
