@@ -40,7 +40,7 @@ const services = [
         id: 3,
         title: 'AI 導入顧問',
         description: '專為企業打造 AI 自動化流程解決方案。',
-        link: '/ai-consultant',
+        link: '/ai-consultant-service',
         icon: 'brain',
     },
     {
