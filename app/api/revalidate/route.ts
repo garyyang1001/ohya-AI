@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     }
 
     try {
-        revalidateTag(tag);
+        revalidateTag(tag, 'max');
         console.log(`[Revalidate] Tag cleared: ${tag}`);
 
         return NextResponse.json({
@@ -55,7 +55,7 @@ export async function POST(request: NextRequest) {
         // 優先使用 tag-based revalidation
         if (tags && Array.isArray(tags)) {
             tags.forEach((tag: string) => {
-                revalidateTag(tag);
+                revalidateTag(tag, 'max');
                 revalidatedItems.push(`tag:${tag}`);
             });
         }
