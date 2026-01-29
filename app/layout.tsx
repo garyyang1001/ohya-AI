@@ -13,6 +13,9 @@ const notoSerifTC = Noto_Serif_TC({
 export const metadata: Metadata = {
     title: "Ohya Digital",
     description: "WordPress Web Design, SEO Marketing, LinkedIn Marketing",
+    verification: {
+        google: "nCW77EhhZMGGKInUkxTQ8SzaONxjoxJjODH74apbr9g",
+    },
 };
 
 export default function RootLayout({
